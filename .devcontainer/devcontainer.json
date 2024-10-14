@@ -1,0 +1,8 @@
+{
+	"name": "Big Data Environment",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"remoteUser": "user",
+	"updateRemoteUserUID": true
+}
