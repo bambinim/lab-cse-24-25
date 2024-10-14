@@ -3,6 +3,21 @@
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
+	"customizations": {
+		"jetbrains": {
+			"plugins": [
+				"com.intellij.gradle",
+				"org.intellij.scala",
+				"PythonCore",
+				"Pythonid",
+				"com.intellij.notebooks.core",
+				"intellij.jupyter",
+				"com.intellij.bigdatatools.core",
+				"com.intellij.bigdatatools.binary.files",
+				"com.intellij.bigdatatools.spark",
+			]
+		}
+	},
 	"remoteUser": "user",
 	"updateRemoteUserUID": true
 }
