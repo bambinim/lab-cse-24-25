@@ -64,7 +64,7 @@ object Streaming {
    * Enabling checkpoint: this allows the application to restart from where it last stopped
    *
    * NOTICE: you need to create a local directory to store the checkpoint data
-   * - file:///c:/spark-3.5.1-bin-hadoop3/streaming/ex3
+   * - file:///opt/spark-3.5.1-bin-hadoop3/streaming/ex3
    * @param sc
    */
   def exercise3(sc: SparkContext, host: String, port: Int, path: String): Unit = {
@@ -130,9 +130,17 @@ object Streaming {
    * The dataset for this exercise is the content of dataset/tweet.dsv
    * This job is a simple evolution of word counting to see the currently trending hashtags.
    * The window is wide 1 minute and it is updated every 5 seconds.
+   * File header: LANGUAGE|CONTENT|TW_HASHTAGS|SENTIMENT_CRAWLER|CITY|COUNTY|STATE|COUNTRY|CONTINENT|FULLNAME|GENDER
    * @param sc
    */
   def exercise6(sc: SparkContext, host: String, port: Int): Unit = {
+    val ssc = new StreamingContext(sc, Seconds(3))
+    val lines = ssc.socketTextStream(host,port,StorageLevel.MEMORY_AND_DISK_SER).window(Seconds(60), Seconds(3))
+    lines.flatMap(_.split('|')(2).split(',')).map(el => (el.trim(), 1)).reduceByKey(_+_)
+      .map({case (tag, count) => (count, tag)}).transform(rdd => rdd.sortByKey(false)).print()
+
+    ssc.start()
+    ssc.awaitTermination()
   }
 
   /**
